@@ -17,7 +17,7 @@
 #define B10000001 129
 #define B11000011 195
 
-#define LOG_TAG_CANBUS "CanBus"
+#define LOG_TAG_CANBUS "VescCan"
 
 typedef enum {
   CAN_PACKET_SET_DUTY = 0,
@@ -111,7 +111,6 @@ class CanBus {
       LoopbackStream *stream;
       void init();
       void loop();
-      void dumpVescValues();
       void proxyIn(std::string in);
       void proxyOut(uint8_t *data, int size, uint8_t crc1, uint8_t crc2);
     private:
@@ -122,12 +121,6 @@ class CanBus {
       void printFrame(CAN_frame_t rx_frame, int frameCount);
       void processFrame(CAN_frame_t rx_frame, int frameCount);
       void sendCanFrame(const CAN_frame_t* p_frame);
-      int32_t readInt32Value(CAN_frame_t rx_frame, int startbyte);
-      int16_t readInt16Value(CAN_frame_t rx_frame, int startbyte);
-      int32_t readInt32ValueFromBuffer(int startbyte, boolean isProxyRequest);
-      int16_t readInt16ValueFromBuffer(int startbyte, boolean isProxyRequest);
-      int8_t readInt8ValueFromBuffer(int startbyte, boolean isProxyRequest);
-      std::string readStringValueFromBuffer(int startbyte, int length, boolean isProxyRequest);
       uint8_t vesc_id;
       uint8_t esp_can_id;
       uint8_t ble_proxy_can_id;

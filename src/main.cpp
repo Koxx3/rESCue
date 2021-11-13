@@ -24,7 +24,7 @@ void setup() {
   AppConfiguration::getInstance()->readPreferences();
   Logger::setLogLevel(AppConfiguration::getInstance()->config.logLevel);
   if(Logger::getLogLevel() != Logger::SILENT) {
-      Serial.begin(VESC_BAUD_RATE);
+      Serial.begin(921600);
   }
 
   vesc.begin(VESC_BAUD_RATE, SERIAL_8N1, VESC_RX_PIN, VESC_TX_PIN, false);      

@@ -15,7 +15,7 @@
 #include "AppConfiguration.h"
 #include <NimBLEDevice.h>
 
-#define LOG_TAG_BLESERVER "BleServer"
+#define LOG_TAG_BLESERVER "BluetoothHandler"
 
 #define VESC_SERVICE_UUID            "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" 
 #define VESC_CHARACTERISTIC_UUID_RX  "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
