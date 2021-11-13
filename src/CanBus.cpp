@@ -396,7 +396,7 @@ void CanBus::proxyIn(std::string in) {
 void CanBus::proxyOut(uint8_t *data, int size, uint8_t crc1, uint8_t crc2) {
   if(Logger::getLogLevel() == Logger::NOTICE) {
     char buf[64];
-    snprintf(buf, 64, "Proxy out : CAN => STREAM, sending %d bytes\n", size);
+    snprintf(buf, 64, "Proxy out : CAN => STREAM, sending %d bytes", size);
     Logger::notice(LOG_TAG_CANBUS, buf);
   }
   //Start bit, package size
