@@ -4,6 +4,15 @@
 
 # rESCue - add more safety and control to your VESC based vehicle
 
+## MAIN FEATURES
+
+- CANBUS and VESC-Status
+- transparent BLE-UART bridge for VESC-App (**no need for seperate Bluetooth module**)
+- Support for Front- and Backlight
+- Lightbar for battery monitor and footpad sensor (visual and acoustic)
+- Blynk-App (Monitoring & Configuration)
+- Over-The-Air updates (OTA)
+
 *2021-04-09: Renamed from "funwheel-controller" to rESCue.*
 
 ***2021-06-22: CANBUS-only is now supported, see CANBUS***
@@ -16,19 +25,9 @@ The ESP32 D1 Mini is highly recommended, but other ESP32 also work.
 
 ### rESCue PCB
 
-If you're interested in an almost plug-and-play solution, you might want to get the rESCue PCB. Jonas from the #Funwheel Discord-server did a great Job and designed a PCB.
+If you're interested in an almost plug-and-play solution, you might want to get the rESCue PCB from our [rESCue-Store](https://shop.thank-the-maker.org).
 
-Here's what rev3.1 of it looks like.
-
-![rESCue PCB Rev. 3.1](docs/images/wheelbarrow-rev3.png)
-
-- sizing 94mm x 37,5mm
-- input voltage 7,5V - 76V
-- output 5V, 1A maximum
-- ESP32 D1 mini header
-- JST-PH header for CANBUS, UART, LED-Battery-indicator, LED-lights
-
-More documentation to come as soon as the PCB officially available.
+<img src="docs/images/rESCue-light-rev1.1.png" alt="rESCue-light-rev1.2" style="width:300px;">
 
 ### Hardware
 
@@ -36,7 +35,7 @@ If your not interested in the rESCue PCB and want build it yourself or only want
 
 - [ESP32 D1 Mini](https://www.amazon.de/AZDelivery-Bluetooth-Internet-Development-Compatible/dp/B08BTRQNB3/), other ESP32 might also work but check if all needed GPIO are accessible
 
-- DC-DC converter ([LM2576HV](https://www.banggood.com/RIDEN-5V-60V-To-1_25V-30V-LM2576HV-DC-DC-Step-Down-Module-p-1060892.html?cur_warehouse=CN&rmmds=search))
+- DC-DC converter ([LM2576HV](https://www.banggood.com/RIDEN-5V-60V-To-1_25V-30V-LM2576HV-DC-DC-Step-Down-Module-p-1060892.html?cur_warehouse=CN&rmmds=search)) or ([XL7015](https://de.banggood.com/XL7015-DC-DC-Converter-Step-Down-Module-5V-80V-Wide-Voltage-Input-Better-Than-7005A-p-1183456.html?cur_warehouse=CN))
 
 - Piezo-Buzzer (any model should work)
 
@@ -81,6 +80,19 @@ This table shows the PIN mapping:
 |GPIO 23 | MOSFET2 |COB red front / white back (if COB is used)|
 |GPIO 34 | Voltage divider |Battery input (if voltage divider is used)|
 |GPIO 2 | DIN battery |Battery indicator|
+
+### Turning on and off (MOSFET-Switch)
+
+Many people are using a Antispark Switch to power a VESC and external hardware (like the rESCue-PCB) together. These Antispark-Switches are quite expensive.
+A cheaper solution is to use a MOSFET to turn on and of your external hardware when the VESC is powered on.
+There are cheap ready-to-use PCBs out there like this [MOSFET-Switch](https://www.amazon.de/DollaTek-LR784-MOSFET-Steuermodul-Effekt/dp/B07HBL6VZ9/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&dchild=1&keywords=dollatek+mosfet&qid=1629624662&sr=8-1)
+
+Here's how this can be done.
+
+![MOSFET switch wiring](docs/images/mosfet-switch.png)
+
+There are some downsides using a NPN-MOSFET like the one linked obove, but PNP-based MOSFET-switch PCBs are hard to find, especially when the voltage is above 60V.
+To learn about the differences between high- and low-side switching, please read this [article](https://www.baldengineer.com/low-side-vs-high-side-transistor-switch.html#:~:text=The%20low%2Dside%20switch%20is,connected%20and%20switch%20the%20power.&text=However%2C%20if%20you%20are%20delivering,use%20a%20high%2Dside%20switch).
 
 ## Features
 
@@ -183,7 +195,7 @@ To use this App with the official Blynk server, you'll might need to buy some en
 
 ![Blynk-App](docs/images/rESCue-Blynk-QR.jpeg)
 
-QR-Code: App-Version 1.1
+QR-Code: App-Version 1.4
 
 ### Over-The-Air (OTA) Updates
 

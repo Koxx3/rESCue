@@ -16,6 +16,17 @@ std::string bufferString;
 int lastLoop = 0;
 int lastNotification = 0;
 int lastBatteryValue = 0;
+std::map<int, int> blynkSoundMapping = {
+  {1, 0}, {2, 100}, {3, 101}, {4, 102}, {5, 103}, {6, 104}, {7, 105},
+  {8, 106}, {9, 107}, {10, 108}, {11, 109}, {12, 110}, {13, 111},
+  {14, 112}, {15, 113},
+};
+std::map<int, int> blynkWarningMapping = {
+  {1, 0}, {2, 400}, {3, 402}, {4, 406},
+};
+std::map<int, int> blynkAlarmMapping = {
+  {1, 0}, {2, 402}, {3, 300},
+};
 
 void syncPreferencesWithApp();
 
@@ -102,12 +113,12 @@ void BleServer::loop() {
       oneByte = vescSerial->read();
       bufferString.push_back(oneByte);
     }
-    //if(Logger::getLogLevel() == Logger::VERBOSE) {
+    if(Logger::getLogLevel() == Logger::NOTICE) {
       size_t len = bufferString.length();
       char buffer[128];
-      snprintf(buffer, 128, "VESC to BLE : len = %d", len);
+      snprintf(buffer, 128, "VESC => STREAM : len = %d", len);
       Logger::notice(LOG_TAG_BLESERVER, buffer);
-    //}
+    }
 
     if (deviceConnected) {
       while(bufferString.length() > 0) {
@@ -136,16 +147,15 @@ void BleServer::loop() {
       // do stuff here on connecting
       oldDeviceConnected = deviceConnected;
   }
+
 }
 
 //NimBLECharacteristicCallbacks::onWrite
 void BleServer::onWrite(BLECharacteristic *pCharacteristic) {
   char buffer[128];
-//  snprintf(buffer, 128, "onWrite to characteristics: %s", pCharacteristic->getUUID().toString().c_str());
-//  Logger::notice(LOG_TAG_BLESERVER, buffer);
   std::string rxValue = pCharacteristic->getValue();
   size_t len = rxValue.length();
-  snprintf(buffer, 128, "BLE to VESC : len = %d", len);
+  snprintf(buffer, 128, "STREAM => VESC : len = %d", len);
   Logger::notice(LOG_TAG_BLESERVER, buffer);
   if (rxValue.length() > 0) {
     if(pCharacteristic->getUUID().equals(pCharacteristicVescRx->getUUID())) {
