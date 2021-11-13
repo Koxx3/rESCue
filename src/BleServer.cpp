@@ -1,5 +1,4 @@
 #include "BleServer.h"
-#include "BlynkPins.h"
 #include <Logger.h>
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
@@ -23,17 +22,6 @@ std::string bufferString;
 int lastLoop = 0;
 int lastNotification = 0;
 int lastBatteryValue = 0;
-std::map<int, int> blynkSoundMapping = {
-  {1, 0}, {2, 100}, {3, 101}, {4, 102}, {5, 103}, {6, 104}, {7, 105},
-  {8, 106}, {9, 107}, {10, 108}, {11, 109}, {12, 110}, {13, 111},
-  {14, 112}, {15, 113},
-};
-std::map<int, int> blynkWarningMapping = {
-  {1, 0}, {2, 400}, {3, 402}, {4, 406},
-};
-std::map<int, int> blynkAlarmMapping = {
-  {1, 0}, {2, 402}, {3, 300},
-};
 
 void syncPreferencesWithApp();
 
@@ -135,11 +123,6 @@ void syncPreferencesWithApp();
     case VPIN_APP_BRAKE_LIGHT_MIN_AMP:
       snprintf(buf, 128, "Updated param \"BrakeLightMinAmp\" to %d", param.asInt());
       AppConfiguration::getInstance()->config.brakeLightMinAmp = param.asInt();
-      break;
-    case VPIN_APP_LOG_LEVEL:
-      snprintf(buf, 128, "Updated param \"logLevel\" to %d", param.asInt());
-      AppConfiguration::getInstance()->config.logLevel = static_cast<Logger::Level>(param.asInt()-1);
-      Logger::setLogLevel(AppConfiguration::getInstance()->config.logLevel);
       break;
   }
   AppConfiguration::getInstance()->savePreferences();
@@ -298,10 +281,10 @@ void BleServer::loop() {
       oneByte = vescSerial->read();
       bufferString.push_back(oneByte);
     }
-    if(Logger::getLogLevel() == Logger::VERBOSE) {
-      Logger::verbose(LOG_TAG_BLESERVER, "BLE from VESC: ");
-      Logger::verbose(LOG_TAG_BLESERVER, bufferString.c_str());
-    }
+    //if(Logger::getLogLevel() == Logger::VERBOSE) {
+      Logger::notice(LOG_TAG_BLESERVER, "BLE from VESC: ");
+      Logger::notice(LOG_TAG_BLESERVER, bufferString.c_str());
+    //}
 
     if (deviceConnected) {
       while(bufferString.length() > 0) {
@@ -458,22 +441,21 @@ void BleServer::onStatus(NimBLECharacteristic* pCharacteristic, Status status, i
    Blynk.setProperty(VPIN_VESC_DUTY_CYCLE, "color", 
      vescData->dutyCycle > 0 ? BLINK_COLOR_GREEN : BLINK_COLOR_RED);
    Blynk.virtualWrite(VPIN_VESC_MOSFET_TEMP, vescData->mosfetTemp);
+   Blynk.virtualWrite(VPIN_VESC_TACHOMETER, vescData->tachometer);   
    Blynk.virtualWrite(VPIN_VESC_MOTOR_TEMP, vescData->motorTemp);
    Blynk.virtualWrite(VPIN_VESC_AMP_HOURS, vescData->ampHours);
    Blynk.virtualWrite(VPIN_VESC_AMP_HOURS_CHARGED, vescData->ampHoursCharged);
    Blynk.virtualWrite(VPIN_VESC_WATT_HOURS, vescData->wattHours);
    Blynk.virtualWrite(VPIN_VESC_WATT_HOURS_CHARGED, vescData->wattHoursCharged);
    Blynk.virtualWrite(VPIN_VESC_CURRENT, vescData->current);
-   Blynk.virtualWrite(VPIN_VESC_TACHOMETER, vescData->tachometer);
-   Blynk.virtualWrite(VPIN_VESC_TACHOMETER_ABS, vescData->tachometerAbsolut);
    if(AppConfiguration::getInstance()->config.isNotificationEnabled){
-     if(millis() - lastNotification > 60000) { // Notification only all once a minutes
+     if(millis() - lastNotification > 180000) { // Notification only all 3 minutes
        if(vescData->inputVoltage > AppConfiguration::getInstance()->config.maxBatteryVoltage) {
          Blynk.notify("Battery too high: " + String(vescData->inputVoltage) + "V");
        }
        if(vescData->inputVoltage < AppConfiguration::getInstance()->config.minBatteryVoltage) {
          Blynk.notify("Battery dropped below: " + String(vescData->inputVoltage) + "V");
-       }  
+       }
        lastBatteryValue = vescData->inputVoltage;
        lastNotification = millis();
      }
@@ -514,7 +496,5 @@ void syncPreferencesWithApp() {
     AppConfiguration::getInstance()->config.lightColorSecondaryRed,
     AppConfiguration::getInstance()->config.lightColorSecondaryGreen,
     AppConfiguration::getInstance()->config.lightColorSecondaryBlue);
-  Blynk.virtualWrite(VPIN_APP_LOG_LEVEL, AppConfiguration::getInstance()->config.logLevel+1);
-
 }
 #endif //BLYNK_ENABLED

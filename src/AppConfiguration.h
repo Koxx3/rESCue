@@ -35,7 +35,6 @@ struct Config {
   int numberPixelBatMon = 5;
   int vescId = 25;
   String authToken;
-  Logger::Level logLevel = Logger::WARNING;
 };
 
 class AppConfiguration {

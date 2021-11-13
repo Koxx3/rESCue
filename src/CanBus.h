@@ -4,15 +4,12 @@
 
 #include "Arduino.h"
 #include "config.h"
-#include "AppConfiguration.h"
 #include <LoopbackStream.h>
 
 #ifdef CANBUS_ENABLED
 
 #include <ESP32CAN.h>
 #include <CAN_config.h>
-
-#define BUFFER_SIZE 65535
 
 #define B10000001 129
 #define B11000011 195
@@ -92,7 +89,6 @@ class CanBus {
         double pidPosition;
         double inputVoltage;
         double tachometer;
-        double tachometerAbsolut;
 
         double pidOutput;
         double pitch;
@@ -120,43 +116,14 @@ class CanBus {
       void requestBalanceData();
       void ping();
       void printFrame(CAN_frame_t rx_frame, int frameCount);
-      void processFrame(CAN_frame_t rx_frame, int frameCount);
+      void processFrame(CAN_frame_t rx_frame);
       void sendCanFrame(const CAN_frame_t* p_frame);
       int32_t readInt32Value(CAN_frame_t rx_frame, int startbyte);
       int16_t readInt16Value(CAN_frame_t rx_frame, int startbyte);
-      int32_t readInt32ValueFromBuffer(int startbyte, boolean isProxyRequest);
-      int16_t readInt16ValueFromBuffer(int startbyte, boolean isProxyRequest);
-      int8_t readInt8ValueFromBuffer(int startbyte, boolean isProxyRequest);
-      std::string readStringValueFromBuffer(int startbyte, int length, boolean isProxyRequest);
-      uint8_t vesc_id;
-      uint8_t esp_can_id;
-      uint8_t ble_proxy_can_id;
-      int32_t RECV_STATUS_1;
-      int32_t RECV_STATUS_2;
-      int32_t RECV_STATUS_3;
-      int32_t RECV_STATUS_4;
-      int32_t RECV_STATUS_5;
-      uint32_t RECV_FILL_RX_BUFFER;
-      uint32_t RECV_PROCESS_RX_BUFFER;
-      uint32_t RECV_PROCESS_SHORT_BUFFER_PROXY;
-      uint32_t RECV_FILL_RX_BUFFER_PROXY;
-      uint32_t RECV_FILL_RX_BUFFER_LONG_PROXY;
-      uint32_t RECV_PROCESS_RX_BUFFER_PROXY;
-      boolean initialized = false;
-      int interval = 500;
-      SemaphoreHandle_t mutex_v = xSemaphoreCreateMutex();
-      uint16_t length = 0;
-      uint8_t command = 0;
-      boolean longPacket = false;
-      std::string longPackBuffer;
-      int initRetryCounter = 5;
-      int lastDump = 0;
-      int lastRetry = 0;
-      int lastStatus = 0;
-      int lastRealtimeData = 0;
-      int lastBalanceData = 0;
-      std::vector<uint8_t> buffer = {};
-      std::vector<uint8_t> proxybuffer = {};
+      int32_t readInt32ValueFromBuffer(int startbyte);
+      int16_t readInt16ValueFromBuffer(int startbyte);
+      int8_t readInt8ValueFromBuffer(int startbyte);
+      std::string readStringValueFromBuffer(int startbyte, int length);
 };
 
 #endif //CANBUS_ENABLED

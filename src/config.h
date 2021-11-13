@@ -7,7 +7,7 @@
 
 #define SOFTWARE_VERSION_MAJOR 1
 #define SOFTWARE_VERSION_MINOR 3
-#define SOFTWARE_VERSION_PATCH 7
+#define SOFTWARE_VERSION_PATCH 1
 #define HARDWARE_VERSION_MAJOR 3
 #define HARDWARE_VERSION_MINOR 1
 
@@ -20,15 +20,13 @@
 #ifdef LED_WS28xx
  #define NUMPIXELS    16  // the number of LEDs if WS28xx is used
  #define LED_MODE_ODD_EVEN
- #define MAX_BRIGHTNESS       100 // max brightness of LEDs, allowed values 1-255
- #define MAX_BRIGHTNESS_BRAKE 255 // max brightness of LEDs for brake signal, allowed values 1-255
 #endif //LED_WS28xx
 #ifdef LED_COB
- #define MAX_BRIGHTNESS       230 // max brightness of LEDs, allowed values 1-255
- #define MAX_BRIGHTNESS_BRAKE 255 // max brightness of LEDs for brake signal, allowed values 1-255
- #define NUMPIXELS    0  // We don't have single pi
  #define DUAL_MOSFET     // uncomment if you use two MOSFET to activate color switching
 #endif //LED_COB
+
+#define MAX_BRIGHTNESS       100 // max brightness of LEDs, allowed values 1-255
+#define MAX_BRIGHTNESS_BRAKE 255 // max brightness of LEDs for brake signal, allowed values 1-255
 
 /**** Definition of the battery parameter for battery monitor ****/
 
@@ -53,10 +51,12 @@
 // The name this controller should advertise for BLE
 #define BT_NAME "rESCue"
 #define CANBUS_ENABLED
-#define BLYNK_ENABLED
+//#define BLYNK_ENABLED
 
 #ifdef CANBUS_ENABLED
- #define VESC_CAN_ID 25 //VESC-ID as configured in VESC as decimal
+ #define VESC_CAN_ID 55
+ #define ESP_CAN_ID 3
+ #define BLE_CAN_PROXY_ID 4
  #define CANBUS_ONLY
 #endif //CANBUS_ENABLED
 

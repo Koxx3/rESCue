@@ -1,23 +1,11 @@
 #ifndef __BLE_SERVER_H__
 #define __BLE_SERVER_H__
 
-#define BLYNK_USE_DIRECT_CONNECT
-#ifndef BLYNK_INFO_CONNECTION
- #define BLYNK_INFO_CONNECTION "Esp32_NimBLE"
-#endif
-#define BLYNK_SEND_ATOMIC
-#define BLYNK_SEND_CHUNK 20
-//#define BLYNK_SEND_THROTTLE 20
-
 #include <Arduino.h>
 #include "config.h"
 #include "CanBus.h"
 #include "AppConfiguration.h"
-#include "Buzzer.h"
 #include <NimBLEDevice.h>
-#include <BlynkApiArduino.h>
-#include <Blynk/BlynkProtocol.h>
-#include <utility/BlynkFifo.h>
 
 #define LOG_TAG_BLESERVER "BleServer"
 
@@ -27,8 +15,6 @@
 #define BLYNK_SERVICE_UUID           "713D0000-503E-4C75-BA94-3148F18D941E"
 #define BLYNK_CHARACTERISTIC_UUID_RX "713D0003-503E-4C75-BA94-3148F18D941E"
 #define BLYNK_CHARACTERISTIC_UUID_TX "713D0002-503E-4C75-BA94-3148F18D941E"
-
-extern BlynkFifo<uint8_t, BLYNK_MAX_READBYTES*2> mBuffRX;
 
 class BleServer : 
   public NimBLEServerCallbacks, 
@@ -43,7 +29,6 @@ class BleServer :
 #endif
 
       // Blynk stuff
-      void begin(char BLYNK_UNUSED *h, uint16_t BLYNK_UNUSED p);
       void begin();
       bool connect();
       void disconnect();

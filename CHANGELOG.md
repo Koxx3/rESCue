@@ -1,58 +1,14 @@
 # Changelog for rESCue firmware
 
-## Release 1.3.7 (not yet released)
-
-## Release 1.3.6
-
-### 20.08.2021
-
-- Fixed some issues when COB is used
-- updated Readme, added MOSFET-Switch
-- released v1.3.6
-
-### 19.08.2021
-
-- Fixed an issue in the CANBUS-lib. Sending messages without a working CANBUS makes ESP freeze
-
-### 18.08.2021
-
-- implemented changing LogLevel via Blynk-App
-
-## Release 1.3.5
-
-### 16.08.2021
-
-- eliminated hard coded VESC-ID
-
-## Release 1.3.4
-
-### 16.08.2021
-
-- fixed CAN-issue with VESC version 5.3
-- prepared release 1.3.4
-
-### 20.07.2021
-
-- fixed WiFi OTA update by changing partition schema to default
-- fixed "Guru Meditation Error: Core 1 panic'ed (Cache disabled but cached memory region accessed)" while OTA
-- fixed app crash when App-Configuration is written and not dividable by 6 byte
-
-## Release 1.3.3
-
-### 19.07.2021
-
-- improved CANBUS communication
-- Fixed bug that CANBUS freezes when sending multiple frames at the same time
-
 ## Release 1.3.1
 
 - bugfix lights, erpm was read wrong sometimes
 
 ## Release 1.3.0
 
-### 27.06.2021
+### 27.06.2021 
 
-- prepared release 1.3.0
+ - prepared release 1.3.0
 
 ### 25.06.2021
 
