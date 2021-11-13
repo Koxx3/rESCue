@@ -74,7 +74,7 @@ void CanBus::init() {
   */
     //start CAN Module
     ESP32Can.CANInit();
-    requestFirmwareVersion();
+    //requestFirmwareVersion();
 }
 
 /*
@@ -83,6 +83,7 @@ void CanBus::init() {
 */
 void CanBus::loop() {
 
+/*
     if(millis() - lastRealtimeData > 2*interval) {
       requestRealtimeData();
     }
@@ -90,6 +91,7 @@ void CanBus::loop() {
     if(millis() - lastBalanceData > interval) {
       requestBalanceData();
     }
+*/
 
     int frameCount = 0;
     CAN_frame_t rx_frame;
@@ -306,10 +308,10 @@ void CanBus::proxyIn(std::string in) {
       default:
         return;
     }
-    if(Logger::getLogLevel() == Logger::VERBOSE) {
+    if(Logger::getLogLevel() == Logger::NOTICE) {
       char buf[64];
-      snprintf(buf, 64, "Proxy in, command %d, length %d\n", command, length);
-      Logger::verbose(LOG_TAG_CANBUS, buf);
+      snprintf(buf, 64, "Proxy in  : STREAM => CAN, command %d, length %d, longPacket %d", command, length, longPacket);
+      Logger::notice(LOG_TAG_CANBUS, buf);
     }
   }
 
@@ -392,10 +394,10 @@ void CanBus::proxyIn(std::string in) {
 }
 
 void CanBus::proxyOut(uint8_t *data, int size, uint8_t crc1, uint8_t crc2) {
-  if(Logger::getLogLevel() == Logger::VERBOSE) {
-    char buf[32];
-    snprintf(buf, 32, "Proxy out, sending %d bytes\n", size);
-    Logger::verbose(LOG_TAG_CANBUS, buf);
+  if(Logger::getLogLevel() == Logger::NOTICE) {
+    char buf[64];
+    snprintf(buf, 64, "Proxy out : CAN => STREAM, sending %d bytes\n", size);
+    Logger::notice(LOG_TAG_CANBUS, buf);
   }
   //Start bit, package size
   if(size <= 255) {

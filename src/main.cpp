@@ -5,14 +5,6 @@
 #include "CanBus.h"
 #include "AppConfiguration.h"
 
-int new_forward  = LOW;
-int new_backward = LOW;
-int new_brake    = LOW;
-int idle         = LOW;
-double idle_erpm = 10.0;
-
-int lastFake = 4000;
-
 HardwareSerial vesc(2);
 
 #if defined(CANBUS_ENABLED)
@@ -26,7 +18,7 @@ void localLogger(Logger::Level level, const char* module, const char* message);
 
 void setup() {
   Logger::setOutputFunction(localLogger);
-  Logger::setLogLevel(Logger::WARNING);
+  Logger::setLogLevel(Logger::NOTICE);
   if(Logger::getLogLevel() != Logger::SILENT) {
     Serial.begin(VESC_BAUD_RATE);
   }
